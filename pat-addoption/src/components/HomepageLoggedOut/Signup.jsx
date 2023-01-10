@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 export default function Signup() {
+  // const [firstName, setFirstName] = useState();
+  // const [lastName, setLastName] = useState();
+  // const [email, setEmail] = useState();
+  // const [password, setPassword] = useState();
+  // const [confirmpPassword, setConfirmpPassword] = useState();
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
+  const phoneNumberRef = useRef();
   return (
-    <div>
+    <>
       <Form>
         {/* <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>First Name</Form.Label>
@@ -26,6 +36,8 @@ export default function Signup() {
                 placeholder="Enter first name"
                 id="FirstName"
                 name="FirstName"
+                ref={firstNameRef}
+                required
               />
             </Col>
             <Col>
@@ -35,6 +47,8 @@ export default function Signup() {
                 placeholder="Enter last name"
                 id="LastName"
                 name="LastName"
+                ref={lastNameRef}
+                required
               />
             </Col>
           </Row>
@@ -48,6 +62,8 @@ export default function Signup() {
             placeholder="Enter email"
             id="Email"
             name="Email"
+            ref={emailRef}
+            required
           />
         </Form.Group>
 
@@ -61,6 +77,8 @@ export default function Signup() {
                 placeholder="Enter password"
                 id="Password"
                 name="Password"
+                ref={passwordRef}
+                required
               />
             </Col>
             <Col>
@@ -70,6 +88,8 @@ export default function Signup() {
                 placeholder="Enter confirm password"
                 id="ConfirmPassword"
                 name="ConfirmPassword"
+                ref={confirmPasswordRef}
+                required
               />
             </Col>
           </Row>
@@ -84,13 +104,33 @@ export default function Signup() {
             pattern="[0-9]{10}"
             id="PhoneNumber"
             name="PhoneNumber"
+            ref={phoneNumberRef}
+            required
           />
         </Form.Group>
 
-        <Button variant="dark" type="submit">
+        <Button
+          variant="dark"
+          type="submit"
+          onClick={() => {
+            // if (passwordRef.current.value != confirmPasswordRef.current.value) {
+            //   confirmPasswordRef.current.focus();
+
+            //   return alert("The passwords dont match");
+            // }
+            const newUser = {
+              FirstName: firstNameRef.current.value,
+              LastName: lastNameRef.current.value,
+              Email: emailRef.current.value,
+              PhoneNumber: phoneNumberRef.current.value,
+              Password: passwordRef.current.value,
+            };
+            console.log(newUser);
+          }}
+        >
           Submit
         </Button>
       </Form>
-    </div>
+    </>
   );
 }

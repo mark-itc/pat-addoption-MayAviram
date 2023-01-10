@@ -3,15 +3,15 @@ import Button from "react-bootstrap/Button";
 
 export default function LoginSignupButton({ type, func }) {
   return (
-    <div>
+    <>
       <Button
-        variant="light"
+        variant="outline-warning"
         onClick={() => {
           func();
         }}
       >
         {type}
       </Button>
-    </div>
+    </>
   );
 }

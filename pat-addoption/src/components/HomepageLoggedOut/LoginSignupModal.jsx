@@ -7,12 +7,12 @@ import Button from "react-bootstrap/Button";
 
 export default function LoginSignupModal(props) {
   // const [newType, setNewType] = useState(props.type);
-  // console.log(newType);
+
   const loginCheck = props.type === "Login";
   const signupCheck = props.type === "SignUp";
 
   return (
-    <div>
+    <>
       <Modal
         {...props}
         size="lg"
@@ -31,19 +31,19 @@ export default function LoginSignupModal(props) {
         </Modal.Body>
         <Modal.Footer>
           {loginCheck ? (
-            <div>
+            <>
               <span>Need an account?</span>
               <Button variant="link" onClick={() => props.changetype()}>
                 Sign up
               </Button>
-            </div>
+            </>
           ) : (
-            <div>
+            <>
               <span>Already has an account?</span>
               <Button variant="link" onClick={() => props.changetype()}>
                 Log in
               </Button>
-            </div>
+            </>
           )}
 
           <Button variant="outline-dark" onClick={props.onHide}>
@@ -51,6 +51,6 @@ export default function LoginSignupModal(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </>
   );
 }

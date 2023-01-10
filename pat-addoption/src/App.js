@@ -15,6 +15,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
+  Outlet,
 } from "react-router-dom";
 
 function App() {
@@ -22,50 +23,59 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: user ? (
-        <Navigate replace to={"/HomepageLoggedIn"} />
-      ) : (
-        <Navigate replace to={"/HomepageLoggedOut"} />
+      element: (
+        <>
+          <Navigation />
+          <Outlet />
+        </>
       ),
-    },
-    {
-      path: "/HomepageLoggedOut",
-      element: <HomepageLoggedOut />,
-    },
-    {
-      path: "/HomepageLoggedIn",
-      element: <HomepageLoggedIn />,
-    },
-    {
-      path: "/ProfileSettings",
-      element: <ProfileSettings />,
-    },
-    {
-      path: "/MyPetsPage",
-      element: <MyPetsPage />,
-    },
-    {
-      path: "/PetPage",
-      element: <PetPage />,
-    },
-    {
-      path: "/SearchPage",
-      element: <SearchPage />,
-    },
-    {
-      path: "/Admin/Add Pet",
-      element: <AddPet />,
-    },
-    {
-      path: "/Admin/Dashboard",
-      element: <Dashboard />,
+      children: [
+        {
+          path: "/",
+          element: user ? (
+            <Navigate replace to={"/HomepageLoggedIn"} />
+          ) : (
+            <Navigate replace to={"/HomepageLoggedOut"} />
+          ),
+        },
+        {
+          path: "/HomepageLoggedOut",
+          element: <HomepageLoggedOut />,
+        },
+        {
+          path: "/HomepageLoggedIn",
+          element: <HomepageLoggedIn />,
+        },
+        {
+          path: "/ProfileSettings",
+          element: <ProfileSettings />,
+        },
+        {
+          path: "/SearchPage",
+          element: <SearchPage />,
+        },
+        {
+          path: "/MyPetsPage",
+          element: <MyPetsPage />,
+        },
+        {
+          path: "/PetPage/:petId",
+          element: <PetPage />,
+        },
+
+        {
+          path: "/Admin/AddPet",
+          element: <AddPet />,
+        },
+        {
+          path: "/Admin/Dashboard",
+          element: <Dashboard />,
+        },
+      ],
     },
   ]);
-
   return (
     <div className="App">
-      <Navigation />
       <RouterProvider router={router} />
     </div>
   );

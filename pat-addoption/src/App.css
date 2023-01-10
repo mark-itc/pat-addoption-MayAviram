@@ -1,6 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;500;700;900&display=swap");
+
+:root {
+  --color-beige: #ddd0c8;
+  --color-dark-gray: #323232;
+  --color-yellow: #ffcc00;
+  --color-gray: #848080;
+}
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
 .App {
   text-align: center;
-  background-color: beige;
+  background-color: var(--color-beige);
   /* height: 100%; */
   min-height: 100vh;
+  font-family: "Nunito", sans-serif;
 }
+
+.HeaderContiner {
+  background-color: var(--color-dark-gray);
+  color: white;
+  padding: 40px;
+  margin-bottom: 20px;
+}
+
+h1,
+h2,
+h4,
+h5,
+h6 {
+  padding: 10px;
+  /* font-weight: bold; */
+  /* font-weight: 500; */
+}
+/* h2 {
+  padding: 20px;
+} */
+/* .buttonYellow {
+  background-color: #ffcc00;
+} */
+/* button {
+  padding: 20px;
+} */

@@ -1,6 +1,5 @@
 import React from "react";
 import { useContext } from "react";
-
 import { UserContext } from "../context/UserProvider";
 
 export default function HeaderSite() {
@@ -8,11 +7,11 @@ export default function HeaderSite() {
   return (
     <div>
       {!user ? (
-        <h2> Welcome to our pet addopt site!</h2>
+        <h1> Welcome to our pet addopt site!</h1>
       ) : (
-        <h2>
+        <h1>
           Welcome {user.FirstName} {user.LastName} to our pet addopt site!
-        </h2>
+        </h1>
       )}
     </div>
   );
