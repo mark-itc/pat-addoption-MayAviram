@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import PetCard from "./PetCard";
-import { PetsContext } from "../../context/PetsProvider";
+// import { PetsContext } from "../../context/PetsProvider";
 import "../../css/petsPage.css";
 
-export default function PetsCards() {
-  const { petsList } = useContext(PetsContext);
+export default function PetsCards(props) {
+  // const { petsList } = useContext(PetsContext);
+  const { petsList } = props;
   return (
     <div className="petsCards">
       {petsList.map((item) => {

@@ -8,8 +8,6 @@ export default function Login() {
   const [password, setPassword] = useState();
   const emailRef = useRef();
   const passwordRef = useRef();
-  // console.log("email: ", email);
-  // console.log("password: ", password);
 
   return (
     <>

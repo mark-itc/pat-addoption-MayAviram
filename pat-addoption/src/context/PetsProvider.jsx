@@ -125,9 +125,27 @@ function PetsProvider({ children }) {
     },
   ];
   const [petsList, setPetsList] = useState(pets);
-
+  const [ownsfostersList, setOwnfostersList] = useState([
+    pets[0],
+    pets[1],
+    pets[2],
+    pets[3],
+    pets[7],
+  ]);
+  const [savedPetsList, setSavedPetsList] = useState([
+    pets[2],
+    pets[3],
+    pets[4],
+    pets[5],
+    pets[6],
+  ]);
+  // console.log(petsList);
+  // const ownsfostersList = [];
+  // const savedPetsList = [];
   return (
-    <PetsContext.Provider value={{ petsList }}>{children}</PetsContext.Provider>
+    <PetsContext.Provider value={{ petsList, ownsfostersList, savedPetsList }}>
+      {children}
+    </PetsContext.Provider>
   );
 }
 

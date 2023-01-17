@@ -4,6 +4,10 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import "../../css/petsPage.css";
 
+import Checkbox from "@mui/material/Checkbox";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
+
 export default function PetCard({ pet }) {
   const navigate = useNavigate();
 
@@ -16,10 +20,14 @@ export default function PetCard({ pet }) {
           className="petImage"
           alt={`Image${pet.Name}`}
         />
-        {/* <Card.ImgOverlay>
-          <span class="material-symbols-outlined">favorite</span>
-          e87d
-        </Card.ImgOverlay> */}
+        <Card.ImgOverlay className="favIcon">
+          <Checkbox
+            icon={<FavoriteBorder />}
+            checkedIcon={<Favorite />}
+            color="default"
+          />
+        </Card.ImgOverlay>
+
         <Card.Body>
           <Card.Title>{pet.Name.toUpperCase()}</Card.Title>
           <Card.Text>Current status: {pet.currentStatus}</Card.Text>

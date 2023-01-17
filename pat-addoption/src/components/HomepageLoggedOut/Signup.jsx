@@ -19,14 +19,6 @@ export default function Signup() {
   return (
     <>
       <Form>
-        {/* <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control type="text" placeholder="Enter first name" />
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control type="text" placeholder="Enter last name" />
-        </Form.Group> */}
-
-        {/* <Form.Group className="mb-3" controlId="formFirstLastName"> */}
         <Form.Group className="mb-3">
           <Row>
             <Col>
@@ -54,7 +46,6 @@ export default function Signup() {
           </Row>
         </Form.Group>
 
-        {/* <Form.Group className="mb-3" controlId="formEmail"> */}
         <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -67,7 +58,6 @@ export default function Signup() {
           />
         </Form.Group>
 
-        {/* <Form.Group className="mb-3" controlId="formPassword"> */}
         <Form.Group className="mb-3">
           <Row>
             <Col>
@@ -95,7 +85,6 @@ export default function Signup() {
           </Row>
         </Form.Group>
 
-        {/* <Form.Group className="mb-3" controlId="formPhoneNumber"> */}
         <Form.Group className="mb-3">
           <Form.Label>Phone Number</Form.Label>
           <Form.Control
@@ -113,11 +102,6 @@ export default function Signup() {
           variant="dark"
           type="submit"
           onClick={() => {
-            // if (passwordRef.current.value != confirmPasswordRef.current.value) {
-            //   confirmPasswordRef.current.focus();
-
-            //   return alert("The passwords dont match");
-            // }
             const newUser = {
               FirstName: firstNameRef.current.value,
               LastName: lastNameRef.current.value,
