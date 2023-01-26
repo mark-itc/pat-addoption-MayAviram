@@ -3,18 +3,18 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-// import { useState } from "react";
 
 export default function LoginSignupModal(props) {
-  // const [newType, setNewType] = useState(props.type);
+  const { type, show, onHide, changetype } = props;
 
-  const loginCheck = props.type === "Login";
-  const signupCheck = props.type === "SignUp";
+  const loginCheck = type === "Login";
+  const signupCheck = type === "SignUp";
 
   return (
     <>
       <Modal
-        {...props}
+        show={show}
+        onHide={onHide}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -33,20 +33,20 @@ export default function LoginSignupModal(props) {
           {loginCheck ? (
             <>
               <span>Need an account?</span>
-              <Button variant="link" onClick={() => props.changetype()}>
+              <Button variant="link" onClick={() => changetype()}>
                 Sign up
               </Button>
             </>
           ) : (
             <>
               <span>Already has an account?</span>
-              <Button variant="link" onClick={() => props.changetype()}>
+              <Button variant="link" onClick={() => changetype()}>
                 Log in
               </Button>
             </>
           )}
 
-          <Button variant="outline-dark" onClick={props.onHide}>
+          <Button variant="outline-dark" onClick={onHide}>
             Close
           </Button>
         </Modal.Footer>

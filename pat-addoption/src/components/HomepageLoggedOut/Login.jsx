@@ -1,13 +1,82 @@
 import React, { useState } from "react";
-import { useRef } from "react";
+// import { useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import axios from "axios";
 
 export default function Login() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  // const emailRef = useRef();
+  // const passwordRef = useRef();
+  const [message, setMessage] = useState("");
+
+  const checkData = () => {
+    try {
+      if (email.length === 0) {
+        // alert("Error: Input is empty! Please enter your email");
+        setMessage("Error: Input is empty! Please enter your email");
+        return false;
+      } else {
+      }
+
+      if (password.length === 0) {
+        // alert("Error: Input is empty! Please enter your password");
+        setMessage("Error: Input is empty! Please enter your password");
+        return false;
+      } else {
+        if (isNaN(password)) {
+          // alert("Error: Input is invalid! Please enter only numbers");
+          setMessage(
+            "Error: Input is invalid! Password must contain only numbers"
+          );
+          return false;
+        }
+        if (password.length < 6 || password.length > 10) {
+          // alert(
+          //   "Error: Input is invalid! Please enter a password of 6-10 letters"
+          // );
+          setMessage(
+            "Error: Input is invalid! Please enter a password of 6-10 letters"
+          );
+          return false;
+        }
+      }
+      return true;
+    } catch (err) {}
+  };
+
+  const login = async () => {
+    try {
+      const response = await axios.post("http://localhost:3001/login", {
+        email: email,
+        password: parseInt(password),
+      });
+      const data = response.data;
+      setMessage(data.message);
+      // alert(data.message);
+    } catch (err) {
+      // console.log(err);
+      setMessage(err.response.data.message);
+    }
+  };
+
+  // const login = async () => {
+  //   try {
+  //     const response = await fetch("http://localhost:3001/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ email: email, password: parseInt(password) }),
+  //     });
+  //     const data = await response.json();
+  //     setMessage(data.message);
+  //     // alert(data.message);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <>
@@ -17,11 +86,11 @@ export default function Login() {
           <Form.Control
             type="email"
             placeholder="Enter email"
-            ref={emailRef}
+            // ref={emailRef}
             required
-            // onChange={(e) => {
-            //   setEmail(e.target.value);
-            // }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
           />
         </Form.Group>
 
@@ -30,11 +99,13 @@ export default function Login() {
           <Form.Control
             type="password"
             placeholder="Password"
-            ref={passwordRef}
+            // ref={passwordRef}
             required
-            // onChange={(e) => {
-            //   setPassword(e.target.value);
-            // }}
+            minLength="6"
+            maxLength="10"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
         </Form.Group>
         <Button
@@ -42,12 +113,16 @@ export default function Login() {
           type="submit"
           onClick={(e) => {
             e.preventDefault();
-            setEmail(emailRef.current.value);
-            setPassword(passwordRef.current.value);
+            // setEmail(emailRef.current.value);
+            // setPassword(passwordRef.current.value);
+
+            // checkData() && login();
+            login();
           }}
         >
           Submit
         </Button>
+        {message}
       </Form>
     </>
   );
