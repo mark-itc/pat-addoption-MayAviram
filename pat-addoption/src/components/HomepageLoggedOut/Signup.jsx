@@ -4,8 +4,13 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
+import { UserContext } from "../../context/UserProvider";
+import { useContext } from "react";
+// import { Navigate } from "react-router-dom";
 
 export default function Signup() {
+  const { setUser } = useContext(UserContext);
+
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -20,6 +25,78 @@ export default function Signup() {
   // const passwordRef = useRef();
   // const passwordConfirmationRef = useRef();
   // const phoneNumberRef = useRef();
+  const checkData = () => {
+    if (email.length === 0) {
+      setMessage("Error: Input is empty! Please enter your email");
+      return false;
+    } else {
+      if (
+        email.indexOf("@") < 1 ||
+        email.indexOf(".") < 3 ||
+        email.indexOf(".") - email.indexOf("@") < 2
+      ) {
+        setMessage("Error: Input is invalid! Please enter correct email");
+        return false;
+      }
+    }
+    if (firstName.length === 0) {
+      setMessage("Error: Input is empty! Please enter your first name");
+      return false;
+    }
+    if (lastName.length === 0) {
+      setMessage("Error: Input is empty! Please enter your last name");
+      return false;
+    }
+    if (phoneNumber.length === 0) {
+      setMessage("Error: Input is empty! Please enter your phone number");
+      return false;
+    }
+
+    if (password.length === 0) {
+      setMessage("Error: Input is empty! Please enter your password");
+      return false;
+    } else {
+      // if (isNaN(password)) {
+      //   setMessage(
+      //     "Error: Input is invalid! Password must contain only numbers"
+      //   );
+      //   return false;
+      // }
+      if (password.length < 6 || password.length > 10) {
+        setMessage(
+          "Error: Input is invalid! Please enter a password of 6-10 letters"
+        );
+        return false;
+      }
+    }
+    if (passwordConfirmation.length === 0) {
+      setMessage(
+        "Error: Input is empty! Please enter your password confirmation"
+      );
+      return false;
+    } else {
+      // if (isNaN(passwordConfirmation)) {
+      //   setMessage(
+      //     "Error: Input is invalid! Password confirmation must contain only numbers"
+      //   );
+      //   return false;
+      // }
+      if (password.length < 6 || password.length > 10) {
+        setMessage(
+          "Error: Input is invalid! Please enter a password of 6-10 letters"
+        );
+        return false;
+      }
+    }
+    if (passwordConfirmation != password) {
+      setMessage(
+        "Error: Input is invalid! your password and password confirmation are not equal !"
+      );
+      return false;
+    }
+
+    return true;
+  };
 
   const signup = async () => {
     const newUser = {
@@ -31,9 +108,10 @@ export default function Signup() {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      phoneNumber: parseInt(phoneNumber),
-      password: parseInt(password),
-      passwordConfirmation: parseInt(passwordConfirmation),
+      // phoneNumber: parseInt(phoneNumber),
+      phoneNumber: phoneNumber,
+      password: password,
+      passwordConfirmation: passwordConfirmation,
     };
     try {
       const response = await axios.post("http://localhost:3001/signup", {
@@ -41,9 +119,8 @@ export default function Signup() {
       });
       const data = response.data;
       setMessage(data.message);
-      // alert(data.message);
+      setUser(newUser);
     } catch (err) {
-      // console.log(err);
       setMessage(err.response.data.message);
     }
   };
@@ -153,7 +230,10 @@ export default function Signup() {
           type="submit"
           onClick={(e) => {
             e.preventDefault();
+            // checkData();
+            // checkData() && signup();
             signup();
+            // <Navigate replace to={"/"} />;
             // console.log(newUser);
           }}
         >

@@ -10,7 +10,7 @@ export default function HeaderSite() {
         <h1> Welcome to our pet addopt site!</h1>
       ) : (
         <h1>
-          Welcome {user.FirstName} {user.LastName} to our pet addopt site!
+          Welcome {user.firstName} {user.lastName} to our pet addopt site!
         </h1>
       )}
     </div>

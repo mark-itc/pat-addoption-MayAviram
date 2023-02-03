@@ -12,51 +12,50 @@ export default function Login() {
   const [message, setMessage] = useState("");
 
   const checkData = () => {
-    try {
-      if (email.length === 0) {
-        // alert("Error: Input is empty! Please enter your email");
-        setMessage("Error: Input is empty! Please enter your email");
+    if (email.length === 0) {
+      setMessage("Error: Input is empty! Please enter your email");
+      return false;
+    } else {
+      if (
+        email.indexOf("@") < 1 ||
+        email.indexOf(".") < 3 ||
+        email.indexOf(".") - email.indexOf("@") < 2
+      ) {
+        setMessage("Error: Input is invalid! Please enter correct email");
         return false;
-      } else {
       }
+    }
 
-      if (password.length === 0) {
-        // alert("Error: Input is empty! Please enter your password");
-        setMessage("Error: Input is empty! Please enter your password");
+    if (password.length === 0) {
+      setMessage("Error: Input is empty! Please enter your password");
+      return false;
+    } else {
+      // if (isNaN(password)) {
+      //   setMessage(
+      //     "Error: Input is invalid! Password must contain only numbers"
+      //   );
+      //   return false;
+      // }
+      if (password.length < 6 || password.length > 10) {
+        setMessage(
+          "Error: Input is invalid! Please enter a password of 6-10 letters"
+        );
         return false;
-      } else {
-        if (isNaN(password)) {
-          // alert("Error: Input is invalid! Please enter only numbers");
-          setMessage(
-            "Error: Input is invalid! Password must contain only numbers"
-          );
-          return false;
-        }
-        if (password.length < 6 || password.length > 10) {
-          // alert(
-          //   "Error: Input is invalid! Please enter a password of 6-10 letters"
-          // );
-          setMessage(
-            "Error: Input is invalid! Please enter a password of 6-10 letters"
-          );
-          return false;
-        }
       }
-      return true;
-    } catch (err) {}
+    }
+
+    return true;
   };
 
   const login = async () => {
     try {
       const response = await axios.post("http://localhost:3001/login", {
         email: email,
-        password: parseInt(password),
+        password: password,
       });
       const data = response.data;
       setMessage(data.message);
-      // alert(data.message);
     } catch (err) {
-      // console.log(err);
       setMessage(err.response.data.message);
     }
   };
