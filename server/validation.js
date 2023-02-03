@@ -1,25 +1,27 @@
 const Ajv = require("ajv");
 const ajv = new Ajv();
+const addFormats = require("ajv-formats");
+addFormats(ajv);
 
 const signup_schema = {
   type: "object",
   properties: {
     email: {
       type: "string",
-      //   format: "email",
+      format: "email",
       description: "Email of the user",
     },
     password: {
-      type: "integer",
+      type: "string",
       description: "Password of the user",
-      //   minLength: 6,
-      //   maxLength: 10,
+      minLength: 6,
+      maxLength: 10,
     },
     passwordConfirmation: {
-      type: "integer",
+      type: "string",
       description: "Password confirm of the user",
-      //   minLength: 6,
-      //   maxLength: 10,
+      minLength: 6,
+      maxLength: 10,
     },
     firstName: {
       type: "string",
@@ -34,7 +36,8 @@ const signup_schema = {
       description: "Last name of the user",
     },
     phoneNumber: {
-      type: "integer",
+      type: "string",
+      pattern: "^[0-9]{10}$",
       description: "Phone number of the user",
     },
   },
@@ -54,14 +57,14 @@ const login_schema = {
   properties: {
     email: {
       type: "string",
-      //   format: "email",
+      format: "email",
       description: "Email of the user",
     },
     password: {
-      type: "number",
+      type: "string",
       description: "Password of the user",
-      //   minLength: 6,
-      //   maxLength: 10,
+      minLength: 6,
+      maxLength: 10,
     },
   },
   required: ["email", "password"],
