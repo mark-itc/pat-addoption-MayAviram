@@ -4,9 +4,11 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import "../../css/petsPage.css";
 
-import Checkbox from "@mui/material/Checkbox";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import Favorite from "@mui/icons-material/Favorite";
+// import Checkbox from "@mui/material/Checkbox";
+// import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+// import Favorite from "@mui/icons-material/Favorite";
+
+// const changeFavorite = () => {};
 
 export default function PetCard({ pet }) {
   const navigate = useNavigate();
@@ -16,25 +18,26 @@ export default function PetCard({ pet }) {
       <Card style={{ width: "18rem" }}>
         <Card.Img
           variant="top"
-          src={pet.Image}
+          src={pet.image}
           className="petImage"
-          alt={`Image${pet.Name}`}
+          alt={`Image${pet.name}`}
         />
-        <Card.ImgOverlay className="favIcon">
+        {/* <Card.ImgOverlay className="favIcon">
           <Checkbox
             icon={<FavoriteBorder />}
             checkedIcon={<Favorite />}
             color="default"
+            onChange={()=>changeFavorite()}
           />
-        </Card.ImgOverlay>
+        </Card.ImgOverlay> */}
 
         <Card.Body>
-          <Card.Title>{pet.Name.toUpperCase()}</Card.Title>
-          <Card.Text>Current status: {pet.currentStatus}</Card.Text>
+          <Card.Title>{pet.name.toUpperCase()}</Card.Title>
+          <Card.Text>Current status: {pet.adoptionStatus}</Card.Text>
           <Button
             variant="dark"
             onClick={() => {
-              navigate(`/PetPage/${pet.id}`);
+              navigate(`/PetPage/${pet._id}`);
             }}
           >
             See more

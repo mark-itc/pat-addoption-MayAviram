@@ -1,10 +1,11 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const userrouter = require("./routes/user_router.js");
 const petrouter = require("./routes/pet_router.js");
 const signuprouter = require("./routes/signup_router.js");
 const loginrouter = require("./routes/login_router.js");
-const db = require("./DB/petAddoptionDB");
+const { connectDB } = require("./DB/petAddoptionDB");
 
 const app = express();
 const port = 3001;
@@ -17,6 +18,6 @@ app.use("/signup", signuprouter);
 app.use("/login", loginrouter);
 
 app.listen(port, () => {
-  db.connectToServer();
+  connectDB();
   console.log("server is running");
 });

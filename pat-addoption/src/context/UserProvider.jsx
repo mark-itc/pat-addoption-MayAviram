@@ -1,25 +1,41 @@
-import React from "react";
-// import { useEffect } from "react";
-import { createContext, useState } from "react";
+import React, { useEffect, createContext, useState } from "react";
+import localforage from "localforage";
 
 const UserContext = createContext();
 
 function UserProvider({ children }) {
-  // const obj = {
-  //   Id: 1,
-  //   firstName: "May",
-  //   lastName: "Aviram",
-  //   email: "example@gmail.com",
-  //   phoneNumber: 542222222,
-  //   password: 1234,
-  //   role: "admin",
-  // };
-  // const [user, setUser] = useState(obj);
-
   const [user, setUser] = useState();
-  // useEffect(() => {
-  //   console.log("user:", user);
-  // }, user);
+  // const [user, setUser] = useState(null);
+
+  // const updateUser = () => {
+  //   setUser({
+  //     token: user.token,
+  //     firstName: user.firstName,
+  //     role: data.role,
+  //   });
+  // };
+  useEffect(() => {
+    const initUser = async () => {
+      try {
+        const localUser = await localforage.getItem("user");
+        if (!localUser) {
+          // await localforage.setItem("user", null);
+          setUser(null);
+          return;
+        } else {
+          setUser(localUser);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    initUser();
+  }, []);
+
+  useEffect(() => {
+    console.log("user update: ", user);
+  }, [user]);
+
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}

@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "../../css/profileSetting.css";
-import { useRef } from "react";
+import "../../css/settingForm.css";
 
 export default function FormProfileSetting() {
   const firstNameRef = useRef();
@@ -16,7 +15,7 @@ export default function FormProfileSetting() {
 
   return (
     <div>
-      <Form className="ProfileSettingForm">
+      <Form className="settingForm">
         <Row>
           <Col>
             <Form.Label>First Name</Form.Label>

@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+// import { useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
@@ -6,7 +7,7 @@ import Row from "react-bootstrap/Row";
 import axios from "axios";
 import { UserContext } from "../../context/UserProvider";
 import { useContext } from "react";
-// import { Navigate } from "react-router-dom";
+import localforage from "localforage";
 
 export default function Signup() {
   const { setUser } = useContext(UserContext);
@@ -88,18 +89,18 @@ export default function Signup() {
         return false;
       }
     }
-    if (passwordConfirmation != password) {
+    if (passwordConfirmation !== password) {
       setMessage(
         "Error: Input is invalid! your password and password confirmation are not equal !"
       );
       return false;
     }
-
+    setMessage("");
     return true;
   };
 
   const signup = async () => {
-    const newUser = {
+    const createUser = {
       // FirstName: firstNameRef.current.value,
       // LastName: lastNameRef.current.value,
       // Email: emailRef.current.value,
@@ -115,13 +116,27 @@ export default function Signup() {
     };
     try {
       const response = await axios.post("http://localhost:3001/signup", {
-        ...newUser,
+        ...createUser,
       });
       const data = response.data;
       setMessage(data.message);
-      setUser(newUser);
+      // const newUser = {
+      //   token: data.token,
+      //   firstName: data.firstName,
+      //   role: data.role,
+      // };
+      try {
+        await localforage.setItem("user", data);
+        setUser(data);
+        // await localforage.setItem("user", newUser);
+        // setUser(newUser);
+      } catch (err) {
+        console.log(err);
+      }
+      // setUser(newUser);
     } catch (err) {
       setMessage(err.response.data.message);
+      // console.log(err);
     }
   };
 
@@ -231,10 +246,8 @@ export default function Signup() {
           onClick={(e) => {
             e.preventDefault();
             // checkData();
-            // checkData() && signup();
-            signup();
-            // <Navigate replace to={"/"} />;
-            // console.log(newUser);
+            checkData() && signup();
+            // signup();
           }}
         >
           Submit

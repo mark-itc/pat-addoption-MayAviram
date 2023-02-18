@@ -9,9 +9,7 @@ export default function HeaderSite() {
       {!user ? (
         <h1> Welcome to our pet addopt site!</h1>
       ) : (
-        <h1>
-          Welcome {user.firstName} {user.lastName} to our pet addopt site!
-        </h1>
+        <h1>Welcome {user.user.firstName} to our pet addopt site!</h1>
       )}
     </div>
   );

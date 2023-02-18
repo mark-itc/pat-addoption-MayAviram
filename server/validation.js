@@ -71,7 +71,69 @@ const login_schema = {
   additionalProperties: false,
 };
 
-const pet_schema = {};
+const pet_schema = {
+  type: "object",
+  properties: {
+    name: {
+      type: "string",
+      description: "Name of the pet",
+    },
+    type: {
+      type: "string",
+      description: "Type of the pet",
+    },
+    adoptionStatus: {
+      type: "string",
+      description: "Adoption Status of the pet",
+    },
+    height: {
+      type: "number",
+      description: "Height of the pet",
+    },
+    weight: {
+      type: "number",
+      description: "Weight of the pet",
+    },
+    color: {
+      type: "string",
+      description: "Color of the pet",
+    },
+    hypoallergenic: {
+      type: "string",
+      description: "Hypoallergenic of the pet",
+    },
+    dietaryRestrictions: {
+      type: "string",
+      description: "Dietary Restrictions of the pet",
+    },
+    breedOfAnimal: {
+      type: "string",
+      description: "Breed Of Animal of the pet",
+    },
+    image: {
+      type: "string",
+      description: "Image of the pet",
+    },
+    bio: {
+      type: "string",
+      description: "Bio of the pet",
+    },
+  },
+  required: [
+    "name",
+    "type",
+    "adoptionStatus",
+    "height",
+    "weight",
+    "color",
+    "hypoallergenic",
+    "dietaryRestrictions",
+    "breedOfAnimal",
+    "image",
+    "bio",
+  ],
+  additionalProperties: false,
+};
 
 // const validate_signup = ajv.compile(signup_schema);
 // const validate_login = ajv.compile(login_schema);
@@ -95,7 +157,8 @@ function validateData(type) {
     if (!isvalid) {
       const instance = validateData.errors[0].instancePath;
       res.status(400).send({
-        message: `Login failed, ${instance.slice(instance.indexOf("/") + 1)} ${
+        success: false,
+        message: `Failed, ${instance.slice(instance.indexOf("/") + 1)} ${
           validateData.errors[0].message
         }`,
       });
@@ -106,11 +169,11 @@ function validateData(type) {
 }
 
 function validatePasswordMatch(req, res, next) {
-  console.log("req.body: ", req.body);
   if (req.body.password === req.body.passwordConfirmation) {
     next();
   } else {
     res.status(400).send({
+      success: false,
       message: `Password dont match`,
     });
   }

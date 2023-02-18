@@ -1,15 +1,13 @@
 const express = require("express");
 const userrouter = express.Router();
+const UsersController = require("../controllers/UsersController");
+// const Auth = require("../authentication");
 
-userrouter.get("/:id", (req, res) => {
-  res.json({ message: `user id ${req.params.id}` });
-});
+userrouter.get("/:id", UsersController.getUserById);
 
 userrouter.put("/:id", (req, res) => {});
 
-userrouter.get("/", (req, res) => {
-  res.json({ message: "user" });
-});
+userrouter.get("/", (req, res) => {});
 
 userrouter.get("/:id/full", (req, res) => {});
 

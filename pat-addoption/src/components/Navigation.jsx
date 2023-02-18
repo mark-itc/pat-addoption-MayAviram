@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import localforage from "localforage";
 
 // import Button from "react-bootstrap/Button";
 import { UserContext } from "../context/UserProvider";
@@ -10,8 +11,16 @@ import { useContext } from "react";
 // import { Link } from "react-router-dom";
 
 export default function Navigation() {
-  // const { user, setUser } = useContext(UserContext);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+
+  const logout = async () => {
+    try {
+      localforage.clear();
+      setUser(null);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div>
@@ -26,10 +35,10 @@ export default function Navigation() {
             {user ? (
               <>
                 <Nav.Link href="/ProfileSettings">Profile Settings</Nav.Link>
-                {user.role == "admin" && (
+                {user.user.role === "admin" && (
                   <>
                     <NavDropdown title="Admin" id="navbarScrollingDropdown">
-                      <NavDropdown.Item href="Admin/AddPet">
+                      <NavDropdown.Item href="/Admin/AddPet">
                         Add Pet
                       </NavDropdown.Item>
                       <NavDropdown.Item href="/Admin/Dashboard">
@@ -43,29 +52,30 @@ export default function Navigation() {
               </>
             ) : null}
           </Nav>
-          {/* {user ? (
+          {user ? (
             <>
-              <Navbar.Text>Signed in as: {user.FirstName}</Navbar.Text>
+              <Navbar.Text>Signed in as: {user.user.firstName}</Navbar.Text>
               <Navbar.Text>
-                <Button
+                {/* <Button
                   variant="link"
                   onClick={() => {
-                    setUser(null);
+                    // setUser(null);
                   }}
                 >
                   Log Out
-                </Button>
+                </Button> */}
                 <a
                   href="/"
                   onClick={() => {
-                    setUser(null);
+                    // setUser(null);
+                    logout();
                   }}
                 >
                   Log Out
                 </a>
               </Navbar.Text>
             </>
-          ) : null} */}
+          ) : null}
         </Container>
       </Navbar>
     </div>

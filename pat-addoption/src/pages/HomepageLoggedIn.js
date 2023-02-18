@@ -8,7 +8,6 @@ export default function HomepageLoggedIn() {
   return (
     <div>
       <Header>
-        HomepageLoggedIn
         <HeaderSite />
       </Header>
 

@@ -2,15 +2,24 @@ import React, { useContext, useEffect, useState } from "react";
 import TextDisplaying from "../components/MyPetsPage/TextDisplaying";
 import PetsCards from "../components/MyPetsPage/PetsCards";
 import Header from "../components/Header";
-import { PetsContext } from "../context/PetsProvider";
 import "../css/petsPage.css";
+import axios from "axios";
+import { UserContext } from "../context/UserProvider";
+// import { PetsContext } from "../context/PetsProvider";
 
 export default function MyPetsPage() {
-  const { ownsfostersList, savedPetsList } = useContext(PetsContext);
-  const [choosenList, setChoosenList] = useState(savedPetsList);
+  // const { ownsfostersList, savedPetsList } = useContext(PetsContext);
+  // const [choosenList, setChoosenList] = useState(savedPetsList);
+  // const { ownsfostersList, savedPetsList } = useContext(PetsContext);
+
+  const { user } = useContext(UserContext);
+  const [ownsfostersList, setOwnsfostersList] = useState("");
+  const [savedPetsList, setSavedPetsList] = useState("");
+  const [choosenList, setChoosenList] = useState("");
   const [choosenValue, setChoosenValue] = useState("saved");
+  const [existList, setExistList] = useState(false);
+
   const changeListFilter = (e) => {
-    // console.log(e);
     if (e.target.value === "savedpets") {
       setChoosenList(savedPetsList);
       setChoosenValue("saved");
@@ -20,14 +29,35 @@ export default function MyPetsPage() {
     }
   };
 
-  const checkIfListNotEmpty = () => {
-    if (choosenList.length === 0) {
-      return true;
+  useEffect(() => {
+    let response;
+    const getPetsLists = async () => {
+      try {
+        response = await axios.get(
+          `http://localhost:3001/pet/user/${user.user._id}`
+        );
+
+        const data = response.data;
+        setOwnsfostersList(data.pets.owned);
+        setSavedPetsList(data.pets.saved);
+        setChoosenList(data.pets.saved);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (user) {
+      getPetsLists();
     }
-  };
-  // useEffect(() => {
-  //   console.log("ownsList: ", ownsList);
-  // }, []);
+  }, [user]);
+
+  useEffect(() => {
+    if (choosenList.length === 0) {
+      setExistList(false);
+    } else {
+      setExistList(true);
+    }
+  }, [choosenList]);
+
   return (
     <div className="myPetsPageContainer">
       <Header>
@@ -39,21 +69,20 @@ export default function MyPetsPage() {
             {/* <option>save pets</option> */}
             <option
               value={"savedpets"}
-              // onChange={changeListFilter}
+              onChange={changeListFilter}
               defaultChecked
             >
               saved pets
             </option>
-            <option
-              value={"owns/fosters"}
-              // onChange={changeListFilter}
-            >
+            <option value={"owns/fosters"} onChange={changeListFilter}>
               owns/fosters pets
             </option>
           </select>
         </div>
       </Header>
-      {checkIfListNotEmpty() ? (
+
+      {/* {checkIfListNotEmpty() ? ( */}
+      {!existList ? (
         <TextDisplaying text={choosenValue} />
       ) : (
         <PetsCards petsList={choosenList} />

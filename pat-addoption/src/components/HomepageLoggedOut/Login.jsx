@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 // import { useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import { UserContext } from "../../context/UserProvider";
+import localforage from "localforage";
 
 export default function Login() {
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const emailRef = useRef();
@@ -43,7 +46,7 @@ export default function Login() {
         return false;
       }
     }
-
+    setMessage("");
     return true;
   };
 
@@ -55,27 +58,24 @@ export default function Login() {
       });
       const data = response.data;
       setMessage(data.message);
+      console.log("data:", data);
+      // const newUser = {
+      //   token: data.token,
+      //   firstName: data.firstName,
+      //   role: data.role,
+      // };
+      try {
+        await localforage.setItem("user", data);
+        setUser(data);
+        // await localforage.setItem("user", newUser);
+        // setUser(newUser);
+      } catch (err) {
+        console.log(err);
+      }
     } catch (err) {
       setMessage(err.response.data.message);
     }
   };
-
-  // const login = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:3001/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ email: email, password: parseInt(password) }),
-  //     });
-  //     const data = await response.json();
-  //     setMessage(data.message);
-  //     // alert(data.message);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   return (
     <>
@@ -115,8 +115,11 @@ export default function Login() {
             // setEmail(emailRef.current.value);
             // setPassword(passwordRef.current.value);
 
-            // checkData() && login();
-            login();
+            checkData() && login();
+            // login();
+            // console.log("user", user);
+            // <Navigate replace to={"/"} />;
+            // redirect("/");
           }}
         >
           Submit

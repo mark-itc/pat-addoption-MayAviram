@@ -1,7 +1,6 @@
 import React from "react";
 import FormProfileSetting from "../components/ProfileSetting/FormProfileSetting";
 import SaveButton from "../components/ProfileSetting/SaveButton";
-
 import Header from "../components/Header";
 
 export default function ProfileSettings() {

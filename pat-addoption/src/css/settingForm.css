@@ -1,0 +1,21 @@
+.settingForm {
+  width: 50% !important;
+  text-align-last: center;
+  margin: auto;
+  padding-bottom: 10px;
+}
+
+.row {
+  margin-bottom: 1rem !important;
+}
+
+.col {
+  padding: 0 !important;
+}
+
+.form-select {
+  border: 2px solid #888 !important;
+  border-radius: 0.5em !important;
+  padding: 0.4em 2em 0.4em 0.6em !important;
+  width: 100% !important;
+}

@@ -1,20 +1,28 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import LoginSignupButton from "../components/HomepageLoggedOut/LoginSignupButton";
 import LoginSignupModal from "../components/HomepageLoggedOut/LoginSignupModal";
 import HeaderSite from "../components/HeaderSite";
 import TextAboutSiteService from "../components/HomepageLoggedOut/TextAboutSiteService";
 import LinkToPage from "../components/LinkToPage";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import { UserContext } from "../context/UserProvider";
 
 export default function HomepageLoggedOut() {
   const [modalShow, setModalShow] = useState(false);
   const [buttonType, setButtonType] = useState(null);
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <div>
       <Header>
-        HomepageLoggedOut
         <HeaderSite />
         <TextAboutSiteService />
         <LoginSignupModal
