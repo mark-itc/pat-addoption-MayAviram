@@ -1,0 +1,73 @@
+.usersListContainer,
+.petsListContainer,
+.detailsContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+
+th {
+  width: auto;
+  background-color: var(--color-dark-gray);
+  color: white;
+}
+
+.tableContainer {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  align-self: center;
+  overflow-x: scroll;
+  border: 2px solid black;
+  max-height: 500px;
+}
+
+th,
+td,
+tr {
+  border: 1px solid rgb(196, 190, 190) !important;
+  padding: 5px;
+}
+
+tr:nth-child(even) {
+  background-color: #ddd;
+}
+
+tr:hover {
+  background-color: var(--color-yellow);
+}
+
+table {
+  width: 100%;
+  background-color: white;
+  text-align: left;
+  padding: 10px;
+}
+button {
+  width: fit-content;
+  align-self: center;
+}
+
+.userPetsContainer img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+}
+
+.userPetsContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.userPets {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  align-self: center;
+  margin: 30px 0px;
+}

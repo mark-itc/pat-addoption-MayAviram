@@ -7,28 +7,15 @@ import axios from "axios";
 
 export default function SearchPage() {
   const [petsSearch, setPetsSearch] = useState();
-  // const getPetsListFromSearch = () => {}
-  // ;
 
   useEffect(() => {
     const initPetsSearch = async () => {
       try {
         const response = await axios.get("http://localhost:3001/pet");
-        // const response = await axios.get("http://localhost:3001/pet", {
-        //   params: { ...params },
-        // });
         const data = response.data;
         setPetsSearch(data.pets);
-        // console.log(data.pets);
-        // setMessage(data.message);
-        // try {
-        // await localforage.setItem("user", data);
-        // setUser(data);
-        // } catch (err) {
-        // console.log(err);
-        // }
       } catch (err) {
-        // setMessage(err.response.data.message);
+        console.log(err);
       }
     };
     initPetsSearch();

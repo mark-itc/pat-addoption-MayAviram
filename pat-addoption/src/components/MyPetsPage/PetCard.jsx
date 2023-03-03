@@ -4,12 +4,6 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import "../../css/petsPage.css";
 
-// import Checkbox from "@mui/material/Checkbox";
-// import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-// import Favorite from "@mui/icons-material/Favorite";
-
-// const changeFavorite = () => {};
-
 export default function PetCard({ pet }) {
   const navigate = useNavigate();
 
@@ -22,14 +16,6 @@ export default function PetCard({ pet }) {
           className="petImage"
           alt={`Image${pet.name}`}
         />
-        {/* <Card.ImgOverlay className="favIcon">
-          <Checkbox
-            icon={<FavoriteBorder />}
-            checkedIcon={<Favorite />}
-            color="default"
-            onChange={()=>changeFavorite()}
-          />
-        </Card.ImgOverlay> */}
 
         <Card.Body>
           <Card.Title>{pet.name.toUpperCase()}</Card.Title>

@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-// import { useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
@@ -10,8 +9,6 @@ export default function Login() {
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const emailRef = useRef();
-  // const passwordRef = useRef();
   const [message, setMessage] = useState("");
 
   const checkData = () => {
@@ -33,12 +30,6 @@ export default function Login() {
       setMessage("Error: Input is empty! Please enter your password");
       return false;
     } else {
-      // if (isNaN(password)) {
-      //   setMessage(
-      //     "Error: Input is invalid! Password must contain only numbers"
-      //   );
-      //   return false;
-      // }
       if (password.length < 6 || password.length > 10) {
         setMessage(
           "Error: Input is invalid! Please enter a password of 6-10 letters"
@@ -58,17 +49,9 @@ export default function Login() {
       });
       const data = response.data;
       setMessage(data.message);
-      console.log("data:", data);
-      // const newUser = {
-      //   token: data.token,
-      //   firstName: data.firstName,
-      //   role: data.role,
-      // };
       try {
         await localforage.setItem("user", data);
         setUser(data);
-        // await localforage.setItem("user", newUser);
-        // setUser(newUser);
       } catch (err) {
         console.log(err);
       }
@@ -85,7 +68,6 @@ export default function Login() {
           <Form.Control
             type="email"
             placeholder="Enter email"
-            // ref={emailRef}
             required
             onChange={(e) => {
               setEmail(e.target.value);
@@ -98,7 +80,6 @@ export default function Login() {
           <Form.Control
             type="password"
             placeholder="Password"
-            // ref={passwordRef}
             required
             minLength="6"
             maxLength="10"
@@ -112,14 +93,7 @@ export default function Login() {
           type="submit"
           onClick={(e) => {
             e.preventDefault();
-            // setEmail(emailRef.current.value);
-            // setPassword(passwordRef.current.value);
-
             checkData() && login();
-            // login();
-            // console.log("user", user);
-            // <Navigate replace to={"/"} />;
-            // redirect("/");
           }}
         >
           Submit

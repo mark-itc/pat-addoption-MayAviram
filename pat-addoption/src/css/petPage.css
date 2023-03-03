@@ -4,13 +4,10 @@
   align-items: center;
 }
 
-/* .imageAndName h4 {
-  font-weight: bold;
-} */
 .imageAndName {
   width: 30%;
-  /* height: 30%; */
 }
+
 .imageAndName img {
   border-radius: 50%;
   width: 100%;
@@ -18,10 +15,6 @@
 }
 
 .petDetailsContiner {
-  /* background-color: var(--color-yellow); */
-  /* border-color: var(--color-yellow); */
-
-  /* border: 10px dotted var(--color-yellow); */
   height: 500px;
   width: 80%;
   display: flex;

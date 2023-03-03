@@ -5,13 +5,8 @@ import Header from "../components/Header";
 import "../css/petsPage.css";
 import axios from "axios";
 import { UserContext } from "../context/UserProvider";
-// import { PetsContext } from "../context/PetsProvider";
 
 export default function MyPetsPage() {
-  // const { ownsfostersList, savedPetsList } = useContext(PetsContext);
-  // const [choosenList, setChoosenList] = useState(savedPetsList);
-  // const { ownsfostersList, savedPetsList } = useContext(PetsContext);
-
   const { user } = useContext(UserContext);
   const [ownsfostersList, setOwnsfostersList] = useState("");
   const [savedPetsList, setSavedPetsList] = useState("");
@@ -66,7 +61,6 @@ export default function MyPetsPage() {
         <div className="selectPetsList">
           <span>Show by:</span>
           <select onChange={changeListFilter}>
-            {/* <option>save pets</option> */}
             <option
               value={"savedpets"}
               onChange={changeListFilter}
@@ -81,7 +75,6 @@ export default function MyPetsPage() {
         </div>
       </Header>
 
-      {/* {checkIfListNotEmpty() ? ( */}
       {!existList ? (
         <TextDisplaying text={choosenValue} />
       ) : (

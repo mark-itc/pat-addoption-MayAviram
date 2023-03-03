@@ -1,11 +1,12 @@
 const PetsDAO = require("../DB/PetsDAO");
 const UsersDAO = require("../DB/UsersDAO");
+
 class PetsController {
   static async getPetById(req, res) {
     try {
       const pet = await PetsDAO.getPetById(req.params.id);
       if (pet) {
-        res.status(200).send({ success: true, message: "success", pets: pet });
+        res.status(200).send({ success: true, message: "success", pet: pet });
       } else {
         res.status(400).send({ success: false, message: "this pet not found" });
       }
@@ -51,6 +52,8 @@ class PetsController {
   }
 
   static async addPet(req, res) {
+    const fileUrl = encodeURI(req.file.path);
+
     const newPet = {
       name: req.body.name,
       type: req.body.type,
@@ -61,7 +64,7 @@ class PetsController {
       hypoallergenic: req.body.hypoallergenic,
       dietaryRestrictions: req.body.dietaryRestrictions,
       breedOfAnimal: req.body.breedOfAnimal,
-      image: req.body.image,
+      image: fileUrl,
       bio: req.body.bio,
     };
 
@@ -73,6 +76,39 @@ class PetsController {
           .send({ success: true, message: "pet added successful" });
       } else {
         res.status(400).send({ success: false, message: "this pet not added" });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async updatePet(req, res) {
+    const fileUrl = encodeURI(req.file.path);
+
+    const newPet = {
+      name: req.body.name,
+      type: req.body.type,
+      adoptionStatus: req.body.adoptionStatus,
+      height: req.body.height,
+      weight: req.body.weight,
+      color: req.body.color,
+      hypoallergenic: req.body.hypoallergenic,
+      dietaryRestrictions: req.body.dietaryRestrictions,
+      breedOfAnimal: req.body.breedOfAnimal,
+      image: fileUrl,
+      bio: req.body.bio,
+    };
+
+    try {
+      const updatePet = await PetsDAO.updatePet(newPet, req.params.id);
+      if (updatePet) {
+        res
+          .status(200)
+          .send({ success: true, message: "pet updated successful" });
+      } else {
+        res
+          .status(400)
+          .send({ success: false, message: "this pet not update" });
       }
     } catch (err) {
       console.log(err);
@@ -96,9 +132,12 @@ class PetsController {
     }
   }
 
-  static async deletePet(req, res) {
+  static async deleteSavePet(req, res) {
     try {
-      const deletePet = await UsersDAO.deletePet(req.body._id, req.params.id);
+      const deletePet = await UsersDAO.deleteSavePet(
+        req.body._id,
+        req.params.id
+      );
       if (deletePet) {
         res.status(200).send({
           success: true,
@@ -135,6 +174,45 @@ class PetsController {
         });
       }
       return userPets;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async returnPet(req, res) {
+    try {
+      const returnPet = await UsersDAO.deleteOwnePet(
+        req.body._id,
+        req.params.id
+      );
+      PetsDAO.updateAdoptionStatus(req.params.id, "available");
+      if (returnPet) {
+        res.status(200).send({
+          success: true,
+          message: "pet return successfuly",
+        });
+      } else {
+        res.status(400).send({ success: false, message: "pet didnt return" });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async adoptOrFosterPet(req, res) {
+    try {
+      const ownedPet = await UsersDAO.addOwnePet(req.body._id, req.params.id);
+      PetsDAO.updateAdoptionStatus(req.params.id, req.body.adoptionStatus);
+      if (ownedPet) {
+        res.status(200).send({
+          success: true,
+          message: "pet is owned by user successfuly",
+        });
+      } else {
+        res
+          .status(400)
+          .send({ success: false, message: "pet isnt owne by user yet" });
+      }
     } catch (err) {
       console.log(err);
     }

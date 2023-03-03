@@ -40,6 +40,22 @@ class Pets {
       return false;
     }
   }
+  static async updatePet(pet, id) {
+    try {
+      const updatepet = await petsCollection.updateOne(
+        {
+          _id: ObjectId(id),
+        },
+        {
+          $set: pet,
+        }
+      );
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
 
   static async getPetByListOfId(list) {
     try {
@@ -48,6 +64,22 @@ class Pets {
           _id: { $in: list },
         })
         .toArray();
+      return pets;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async updateAdoptionStatus(id, newAdoptionStatus) {
+    try {
+      const pets = await petsCollection.updateOne(
+        {
+          _id: ObjectId(id),
+        },
+        {
+          $set: { adoptionStatus: newAdoptionStatus },
+        }
+      );
       return pets;
     } catch (err) {
       console.log(err);

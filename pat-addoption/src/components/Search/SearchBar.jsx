@@ -33,16 +33,8 @@ export default function SearchBar({ setPetsSearch }) {
       });
       const data = response.data;
       setPetsSearch(data.pets);
-      // setMessage(data.message);
-      // try {
-      // await localforage.setItem("user", data);
-      // setUser(data);
-      // } catch (err) {
-      // console.log(err);
-      // }
     } catch (err) {
       console.log(err);
-      // setMessage(err.response.data.message);
     }
   };
   return (
@@ -101,14 +93,11 @@ export default function SearchBar({ setPetsSearch }) {
                     {option}
                   </option>
                 ))}
-                {/* <option value={"foster"}>foster</option>
-                 <option value={"adopted"}>for adoption</option> */}
               </select>
             </div>
             <div className="formOption">
               <input
                 type={"text"}
-                // step={"0.1"}
                 name={"height"}
                 placeholder={"Height"}
                 ref={heightRef}
@@ -117,7 +106,6 @@ export default function SearchBar({ setPetsSearch }) {
             <div className="formOption">
               <input
                 type={"text"}
-                // step={"0.1"}
                 name={"weight"}
                 placeholder={"Weight"}
                 ref={weightRef}

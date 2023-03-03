@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-// import { useRef } from "react";
+import React, { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
 import { UserContext } from "../../context/UserProvider";
-import { useContext } from "react";
 import localforage from "localforage";
 
 export default function Signup() {
@@ -20,12 +18,6 @@ export default function Signup() {
   const [passwordConfirmation, setPasswordConfirmation] = useState();
   const [message, setMessage] = useState("");
 
-  // const firstNameRef = useRef();
-  // const lastNameRef = useRef();
-  // const emailRef = useRef();
-  // const passwordRef = useRef();
-  // const passwordConfirmationRef = useRef();
-  // const phoneNumberRef = useRef();
   const checkData = () => {
     if (email.length === 0) {
       setMessage("Error: Input is empty! Please enter your email");
@@ -57,12 +49,6 @@ export default function Signup() {
       setMessage("Error: Input is empty! Please enter your password");
       return false;
     } else {
-      // if (isNaN(password)) {
-      //   setMessage(
-      //     "Error: Input is invalid! Password must contain only numbers"
-      //   );
-      //   return false;
-      // }
       if (password.length < 6 || password.length > 10) {
         setMessage(
           "Error: Input is invalid! Please enter a password of 6-10 letters"
@@ -76,12 +62,6 @@ export default function Signup() {
       );
       return false;
     } else {
-      // if (isNaN(passwordConfirmation)) {
-      //   setMessage(
-      //     "Error: Input is invalid! Password confirmation must contain only numbers"
-      //   );
-      //   return false;
-      // }
       if (password.length < 6 || password.length > 10) {
         setMessage(
           "Error: Input is invalid! Please enter a password of 6-10 letters"
@@ -101,15 +81,9 @@ export default function Signup() {
 
   const signup = async () => {
     const createUser = {
-      // FirstName: firstNameRef.current.value,
-      // LastName: lastNameRef.current.value,
-      // Email: emailRef.current.value,
-      // PhoneNumber: phoneNumberRef.current.value,
-      // Password: passwordRef.current.value,
       firstName: firstName,
       lastName: lastName,
       email: email,
-      // phoneNumber: parseInt(phoneNumber),
       phoneNumber: phoneNumber,
       password: password,
       passwordConfirmation: passwordConfirmation,
@@ -120,23 +94,15 @@ export default function Signup() {
       });
       const data = response.data;
       setMessage(data.message);
-      // const newUser = {
-      //   token: data.token,
-      //   firstName: data.firstName,
-      //   role: data.role,
-      // };
+
       try {
         await localforage.setItem("user", data);
         setUser(data);
-        // await localforage.setItem("user", newUser);
-        // setUser(newUser);
       } catch (err) {
         console.log(err);
       }
-      // setUser(newUser);
     } catch (err) {
       setMessage(err.response.data.message);
-      // console.log(err);
     }
   };
 
@@ -152,7 +118,6 @@ export default function Signup() {
                 placeholder="Enter first name"
                 id="FirstName"
                 name="FirstName"
-                // ref={firstNameRef}
                 required
                 onChange={(e) => {
                   setFirstName(e.target.value);
@@ -166,7 +131,6 @@ export default function Signup() {
                 placeholder="Enter last name"
                 id="LastName"
                 name="LastName"
-                // ref={lastNameRef}
                 required
                 onChange={(e) => {
                   setLastName(e.target.value);
@@ -183,7 +147,6 @@ export default function Signup() {
             placeholder="Enter email"
             id="Email"
             name="Email"
-            // ref={emailRef}
             required
             onChange={(e) => {
               setEmail(e.target.value);
@@ -200,7 +163,6 @@ export default function Signup() {
                 placeholder="Enter password"
                 id="Password"
                 name="Password"
-                // ref={passwordRef}
                 required
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -214,7 +176,6 @@ export default function Signup() {
                 placeholder="Enter confirm password"
                 id="passwordConfirmation"
                 name="passwordConfirmation"
-                // ref={passwordConfirmationRef}
                 required
                 onChange={(e) => {
                   setPasswordConfirmation(e.target.value);
@@ -232,7 +193,6 @@ export default function Signup() {
             pattern="[0-9]{10}"
             id="PhoneNumber"
             name="PhoneNumber"
-            // ref={phoneNumberRef}
             required
             onChange={(e) => {
               setPhoneNumber(e.target.value);
@@ -245,9 +205,7 @@ export default function Signup() {
           type="submit"
           onClick={(e) => {
             e.preventDefault();
-            // checkData();
             checkData() && signup();
-            // signup();
           }}
         >
           Submit

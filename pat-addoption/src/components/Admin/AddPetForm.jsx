@@ -1,12 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "../../css/settingForm.css";
 import axios from "axios";
-// import "../../css/searchBar.css";
 
-export default function AddPet() {
+export default function AddPet({ type, originPet }) {
   const [message, setMessage] = useState("");
 
   const nameRef = useRef();
@@ -21,7 +20,6 @@ export default function AddPet() {
   const imageRef = useRef();
   const bioRef = useRef();
 
-  // const listOfHypoallergenic = ["yes", "no"];
   const inputRefList = [
     nameRef,
     typeRef,
@@ -34,22 +32,27 @@ export default function AddPet() {
     bioRef,
   ];
   const listOfAdoptionStatus = ["fostered", "adopted", "available"];
+  const AnimalType = ["cat", "dog"];
+  const AnimalColor = [
+    "mix",
+    "white",
+    "black",
+    "brown",
+    "black and white",
+    "brown and white",
+    "redhead",
+  ];
+  const yesAndNo = ["no", "yes"];
 
   const checkData = () => {
     try {
       for (let index = 0; index < inputRefList.length; index++) {
         if (inputRefList[index].current.value.length === 0) {
-          console.log("index", index, inputRefList[index].current.value.length);
           setMessage("Error: Input is empty! Please complete all the fields");
           return false;
         }
       }
-      // if (inputRefList[index].current.type === "file") {
-      //   if (inputRefList[index].current.files.length === 0) {
-      //     setMessage("Error: file is empty! Please choose image");
-      //     return false;
-      //   }
-      // }
+
       if (isNaN(heightRef.current.value) || isNaN(weightRef.current.value)) {
         setMessage(
           "Error: Input is invalid! height and weight must contain only numbers"
@@ -61,7 +64,6 @@ export default function AddPet() {
         setMessage("Error: file is empty! Please choose image");
         return false;
       }
-      console.log("image: ", imageRef.current.value);
       setMessage("");
       return true;
     } catch (err) {
@@ -69,32 +71,64 @@ export default function AddPet() {
     }
   };
 
+  const createPet = () => {
+    const newPet = new FormData();
+    newPet.set("name", nameRef.current.value);
+    newPet.set("type", typeRef.current.value);
+    newPet.set("adoptionStatus", adoptionStatusRef.current.value);
+    newPet.set("height", Number(heightRef.current.value));
+    newPet.set("weight", Number(weightRef.current.value));
+    newPet.set("color", colorRef.current.value);
+    newPet.set("hypoallergenic", hypoallergenicRef.current.value);
+    newPet.set("dietaryRestrictions", dietaryRestrictionsRef.current.value);
+    newPet.set("breedOfAnimal", breedOfAnimalRef.current.value);
+    newPet.set("image", imageRef.current.files[0]);
+    newPet.set("bio", bioRef.current.value);
+    return newPet;
+  };
   const insertPet = async () => {
-    const newPet = {
-      name: nameRef.current.value,
-      type: typeRef.current.value,
-      adoptionStatus: adoptionStatusRef.current.value,
-      height: Number(heightRef.current.value),
-      weight: Number(weightRef.current.value),
-      color: colorRef.current.value,
-      hypoallergenic: hypoallergenicRef.current.value,
-      dietaryRestrictions: dietaryRestrictionsRef.current.value,
-      breedOfAnimal: breedOfAnimalRef.current.value,
-      // image: imageRef.current.value,
-      image: imageRef.current.value,
-      bio: bioRef.current.value,
-    };
+    const newPet = createPet();
     try {
-      const response = await axios.post(`http://localhost:3001/pet`, {
-        ...newPet,
+      const response = await axios.post(`http://localhost:3001/pet`, newPet, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       const data = response.data;
-      console.log("add pet data: ", data);
-      // setPet(data.pets);
+      console.log("add pet respunse data: ", data);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const updatePet = async () => {
+    const newPet = createPet();
+    try {
+      const response = await axios.put(
+        `http://localhost:3001/pet/${originPet._id}`,
+        newPet,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      const data = response.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (type === "set") {
+      nameRef.current.value = originPet.name;
+      typeRef.current.value = originPet.type;
+      adoptionStatusRef.current.value = originPet.adoptionStatus;
+      heightRef.current.value = originPet.height;
+      weightRef.current.value = originPet.weight;
+      colorRef.current.value = originPet.color;
+      hypoallergenicRef.current.value = originPet.hypoallergenic;
+      dietaryRestrictionsRef.current.value = originPet.dietaryRestrictions;
+      breedOfAnimalRef.current.value = originPet.breedOfAnimal;
+      bioRef.current.value = originPet.bio;
+    }
+  }, []);
 
   return (
     <div className="settingForm">
@@ -113,29 +147,16 @@ export default function AddPet() {
         <Row>
           <Col>
             <Form.Label>Type</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter pet type"
-              id="type"
-              name="type"
-              ref={typeRef}
-              required
-            />
+            <Form.Select aria-label="type" id="type" name="type" ref={typeRef}>
+              {AnimalType.map((option, index) => (
+                <option value={option} key={index}>
+                  {option}
+                </option>
+              ))}
+            </Form.Select>
           </Col>
           <Col>
             <Form.Label>Adoption Status</Form.Label>
-            {/* <Form.Control
-              type="text"
-              placeholder="Enter adoption status"
-              id="adoptionStatus"
-              name="adoptionStatus"
-              ref={adoptionStatusRef}
-              required
-            /> */}
-            {/* <Form.Select
-              aria-label="adoptionStatus"
-              style={{ border: " 2px solid #848080" }}
-            > */}
             <Form.Select
               aria-label="adoptionStatus"
               id="adoptionStatus"
@@ -151,14 +172,18 @@ export default function AddPet() {
           </Col>
           <Col>
             <Form.Label>color</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter color"
+            <Form.Select
+              aria-label="color"
               id="color"
               name="color"
               ref={colorRef}
-              required
-            />
+            >
+              {AnimalColor.map((option, index) => (
+                <option value={option} key={index}>
+                  {option}
+                </option>
+              ))}
+            </Form.Select>
           </Col>
         </Row>
         <Row>
@@ -166,7 +191,6 @@ export default function AddPet() {
             <Form.Label>Height</Form.Label>
             <Form.Control
               type="text"
-              // step="0.1"
               placeholder="Enter height"
               id="height"
               name="height"
@@ -179,7 +203,6 @@ export default function AddPet() {
               <Form.Label>Weight</Form.Label>
               <Form.Control
                 type="text"
-                // step="0.1"
                 placeholder="Enter weight"
                 id="weight"
                 name="weight"
@@ -193,14 +216,18 @@ export default function AddPet() {
         <Row>
           <Col>
             <Form.Label>Hypoallergenic</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter some hypoallergenic"
+            <Form.Select
+              aria-label="hypoallergenic"
               id="hypoallergenic"
               name="hypoallergenic"
               ref={hypoallergenicRef}
-              required
-            />
+            >
+              {yesAndNo.map((option, index) => (
+                <option value={option} key={index}>
+                  {option}
+                </option>
+              ))}
+            </Form.Select>
           </Col>
           <Col>
             <Form.Label>Dietary Restrictions</Form.Label>
@@ -231,9 +258,8 @@ export default function AddPet() {
           <Form.Control
             style={{ textAlignLast: "left" }}
             type="file"
-            // placeholder="choose image"
             id="image"
-            name="image"
+            name="petImage"
             ref={imageRef}
             required
           />
@@ -252,12 +278,10 @@ export default function AddPet() {
         <button
           onClick={(e) => {
             e.preventDefault();
-            // checkData();
-            checkData() && insertPet();
-            // insertPet();
+            checkData() && type === "add" ? insertPet() : updatePet();
           }}
         >
-          Add pet!
+          {type === "add" ? "Add pet!" : "Update pet!"}
         </button>
         {message}
       </Form>

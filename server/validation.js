@@ -49,7 +49,13 @@ const signup_schema = {
     "password",
     "passwordConfirmation",
   ],
-  additionalProperties: false,
+  additionalProperties: {
+    type: "string",
+    properties: {
+      bio: { type: "string" },
+    },
+    additionalProperties: false,
+  },
 };
 
 const login_schema = {
@@ -135,10 +141,6 @@ const pet_schema = {
   additionalProperties: false,
 };
 
-// const validate_signup = ajv.compile(signup_schema);
-// const validate_login = ajv.compile(login_schema);
-// const validate_pet = ajv.compile(pet_schema);
-
 function validateData(type) {
   let validateData = null;
   switch (type) {
@@ -153,7 +155,19 @@ function validateData(type) {
   }
 
   return function (req, res, next) {
-    const isvalid = validateData(req.body);
+    let isvalid = null;
+    if (type === "pet") {
+      req.body.height = Number(req.body.height);
+      req.body.weight = Number(req.body.weight);
+      newPet = {
+        ...req.body,
+        image: req.file.path,
+      };
+      isvalid = validateData(newPet);
+    } else {
+      isvalid = validateData(req.body);
+    }
+
     if (!isvalid) {
       const instance = validateData.errors[0].instancePath;
       res.status(400).send({

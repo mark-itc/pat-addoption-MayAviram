@@ -3,15 +3,29 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "../../css/settingForm.css";
+import SaveButton from "../../components/ProfileSetting/SaveButton";
 
 export default function FormProfileSetting() {
   const firstNameRef = useRef();
   const lastNameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
-  const confirmPasswordRef = useRef();
+  const passwordConfirmationRef = useRef();
   const phoneNumberRef = useRef();
-  const bio = useRef();
+  const bioRef = useRef();
+
+  const createNewProfile = () => {
+    const user = {
+      firstName: firstNameRef.current.value,
+      lastName: lastNameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      passwordConfirmation: passwordConfirmationRef.current.value,
+      phoneNumber: phoneNumberRef.current.value,
+      bio: bioRef.current.value,
+    };
+    return user;
+  };
 
   return (
     <div>
@@ -68,9 +82,9 @@ export default function FormProfileSetting() {
             <Form.Control
               type="password"
               placeholder="Enter confirm password"
-              id="ConfirmPassword"
-              name="ConfirmPassword"
-              ref={confirmPasswordRef}
+              id="passwordConfirmation"
+              name="passwordConfirmation"
+              ref={passwordConfirmationRef}
               required
             />
           </Col>
@@ -95,9 +109,10 @@ export default function FormProfileSetting() {
             id="Bio"
             name="Bio"
             rows={3}
-            ref={bio}
+            ref={bioRef}
           />
         </Row>
+        <SaveButton createNewUser={createNewProfile} />
       </Form>
     </div>
   );

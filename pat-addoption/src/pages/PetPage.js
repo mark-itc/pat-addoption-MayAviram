@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
-// import { PetsContext } from "../context/PetsProvider";
 import "../css/petPage.css";
 import axios from "axios";
 import { UserContext } from "../context/UserProvider";
@@ -9,33 +8,47 @@ import { UserContext } from "../context/UserProvider";
 export default function PetPage() {
   const { petId } = useParams();
   const { user } = useContext(UserContext);
-
-  // const { petsList } = useContext(PetsContext);
-  // const pet = petsList.find((item) => item._id === Number(petId));
   const [pet, setPet] = useState();
   const [saved, setSaved] = useState();
+  const [owned, setOwned] = useState();
+
+  const [adoptionStatus, setAdoptionStatus] = useState();
+  const fostered = "fostered";
+  const adopted = "adopted";
+  const available = "available";
 
   useEffect(() => {
     const getPetById = async () => {
       try {
         const response = await axios.get(`http://localhost:3001/pet/${petId}`);
         const data = response.data;
-        setPet(data.pets);
+        setPet(data.pet);
+        if (data.pet.adoptionStatus === fostered) {
+          setAdoptionStatus(fostered);
+        }
+        if (data.pet.adoptionStatus === adopted) {
+          setAdoptionStatus(adopted);
+        }
+        if (data.pet.adoptionStatus === available) setAdoptionStatus(available);
       } catch (err) {
         console.log(err);
       }
     };
     getPetById();
-  }, [petId]);
+  }, [petId, adoptionStatus]);
 
   useEffect(() => {
-    const checkIfSaved = async () => {
+    const getUserPets = async () => {
       try {
         const response = await axios.get(
           `http://localhost:3001/pet/user/${user.user._id}`
         );
         const dataSaved = response.data.pets.saved;
+        const dataOwned = response.data.pets.owned;
+
         let checkSaved;
+        let checkOwned;
+
         dataSaved.forEach((element) => {
           if (checkSaved) return;
           if (element._id === petId) {
@@ -45,12 +58,22 @@ export default function PetPage() {
             setSaved(false);
           }
         });
+
+        dataOwned.forEach((element) => {
+          if (checkOwned) return;
+          if (element._id === petId) {
+            checkOwned = true;
+            setOwned(true);
+          } else {
+            setOwned(false);
+          }
+        });
       } catch (err) {
         console.log(err);
       }
     };
     if (user) {
-      checkIfSaved();
+      getUserPets();
     }
   }, [user]);
 
@@ -72,8 +95,41 @@ export default function PetPage() {
         );
         setSaved(false);
       }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const returnPet = async () => {
+    let response;
+
+    try {
+      response = await axios.post(`http://localhost:3001/pet/${petId}/return`, {
+        ...user.user,
+      });
+      setOwned(false);
+      setAdoptionStatus(available);
       const data = response.data;
-      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const adoptOrFoster = async (newStatus) => {
+    let response;
+
+    try {
+      response = await axios.post(`http://localhost:3001/pet/${petId}/adopt`, {
+        ...user.user,
+        adoptionStatus: newStatus,
+      });
+      setOwned(true);
+      if (newStatus === fostered) {
+        setAdoptionStatus(fostered);
+      } else {
+        setAdoptionStatus(adopted);
+      }
+      const data = response.data;
     } catch (err) {
       console.log(err);
     }
@@ -82,22 +138,57 @@ export default function PetPage() {
   return pet ? (
     <div>
       <Header>
-        {/* <h2>Pet Page</h2> */}
         <h2>My name is : {pet.name.toUpperCase()}</h2>
-        {user ? (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              changeFavorite();
-            }}
-          >
-            {saved ? "unsave pet" : "save pet"}
-          </button>
-        ) : null}
+
+        {user && (
+          <div>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                changeFavorite();
+              }}
+            >
+              {saved ? "unsave pet" : "save pet"}
+            </button>
+
+            {owned && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  returnPet();
+                }}
+              >
+                return pet
+              </button>
+            )}
+            <>
+              {adoptionStatus !== adopted && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    adoptOrFoster(adopted);
+                  }}
+                >
+                  adopt
+                </button>
+              )}
+
+              {adoptionStatus === available && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    adoptOrFoster(fostered);
+                  }}
+                >
+                  foster
+                </button>
+              )}
+            </>
+          </div>
+        )}
       </Header>
       <div className="petPageContainer">
         <div className="imageAndName">
-          {/* <h4>{pet.name.toUpperCase()}</h4> */}
           <img src={pet.image} alt={`ImageOf${pet.name}`} />
         </div>
         <div className="petDetailsContiner">

@@ -16,7 +16,6 @@ class UsersController {
           res.status(200).send({
             success: true,
             message: "You've logged in successfully",
-            // token: token,
             user: {
               _id: user._id,
               email: user.email,
@@ -40,7 +39,7 @@ class UsersController {
 
   static async signUp(req, res) {
     try {
-      const user = await UsersDAO.getUserByEmail(req.body.email);
+      let user = await UsersDAO.getUserByEmail(req.body.email);
 
       if (!user) {
         const newUser = {
@@ -56,25 +55,15 @@ class UsersController {
           },
         };
         const addUser = UsersDAO.addUser(newUser);
+
         if (addUser) {
+          user = await UsersDAO.getUserByEmail(req.body.email);
           const token = Auth.createToken(newUser);
-          // res.status(200).send({
-          //   success: true,
-          //   message: "You've registered and logged in successfully",
-          //   token: token,
-          //   user: {
-          //     _id: newUser._id,
-          //     firstName: newUser.firstName,
-          //     role: newUser.role,
-          //   },
-          // });
           res.set("Authorization", `Bearer ${token}`);
           res.status(200).send({
             success: true,
             message: "You've logged in successfully",
-            // token: token,
             user: {
-              _id: user._id,
               email: user.email,
               firstName: user.firstName,
               role: user.role,
@@ -97,9 +86,93 @@ class UsersController {
     }
   }
 
+  static async uptadeUser(req, res) {
+    try {
+      let user = await UsersDAO.getUserById(req.params.id);
+      let checkEmailExist = false;
+      if (req.body.email !== user.email) {
+        checkEmailExist = await UsersDAO.getUserByEmail(req.body.email);
+      }
+      if (!checkEmailExist) {
+        const newUser = {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          phoneNumber: req.body.phoneNumber,
+          bio: req.body.bio,
+          password: await Auth.hashPassword(req.body.password),
+        };
+        const updateUser = await UsersDAO.uptadeUser(req.params.id, newUser);
+        if (updateUser) {
+          user = await UsersDAO.getUserByEmail(req.body.email);
+          if (user) {
+            const token = Auth.createToken(newUser);
+            res.set("Authorization", `Bearer ${token}`);
+            res.status(200).send({
+              success: true,
+              message: "user is update",
+              user: {
+                _id: user._id,
+                email: user.email,
+                firstName: user.firstName,
+                role: user.role,
+                pets: {
+                  saved: user.pets.saved,
+                  owned: user.pets.owned,
+                },
+              },
+            });
+          }
+        } else {
+          res
+            .status(400)
+            .send({ success: false, message: "user isnt update " });
+        }
+      } else {
+        res
+          .status(400)
+          .send({ success: false, message: "this email alread in use" });
+      }
+    } catch (err) {
+      console.log("err:", err);
+    }
+  }
+
   static async getUserById(req, res) {
     try {
       const user = await UsersDAO.getUserById(req.params.id);
+      if (user) {
+        res.status(200).send({ success: true, message: "success", user: user });
+      } else {
+        res
+          .status(400)
+          .send({ success: false, message: "this user not found" });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async getAllUsers(req, res) {
+    try {
+      const users = await UsersDAO.getAllUsers();
+      if (users) {
+        res
+          .status(200)
+          .send({ success: true, message: "success", users: users });
+      } else {
+        res
+          .status(400)
+          .send({ success: false, message: " didnt get users list" });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async getUserByIdFull(req, res) {
+    try {
+      const user = await UsersDAO.getUserByIdFull(req.params.id);
       if (user) {
         res.status(200).send({ success: true, message: "success", user: user });
       } else {
