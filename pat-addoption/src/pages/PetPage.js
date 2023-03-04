@@ -189,7 +189,10 @@ export default function PetPage() {
       </Header>
       <div className="petPageContainer">
         <div className="imageAndName">
-          <img src={pet.image} alt={`ImageOf${pet.name}`} />
+          <img
+            src={`http://localhost:3001/${pet.image}`}
+            alt={`ImageOf${pet.name}`}
+          />
         </div>
         <div className="petDetailsContiner">
           <div className="detail">

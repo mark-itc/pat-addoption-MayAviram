@@ -1,19 +1,20 @@
 const express = require("express");
 const userrouter = express.Router();
 const UsersController = require("../controllers/UsersController");
-// const Auth = require("../authentication");
 const { validateData, validatePasswordMatch } = require("../validation.js");
+const Auth = require("../authentication");
 
 userrouter.get("/:id", UsersController.getUserById);
 
 userrouter.put(
   "/:id",
+  Auth.verify,
   validateData("signup"),
   validatePasswordMatch,
   UsersController.uptadeUser
 );
 
-userrouter.get("/", UsersController.getAllUsers);
+userrouter.get("/", Auth.verify, Auth.checkAdmin, UsersController.getAllUsers);
 
 userrouter.get("/:id/full", UsersController.getUserByIdFull);
 

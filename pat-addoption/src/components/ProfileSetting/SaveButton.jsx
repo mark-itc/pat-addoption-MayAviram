@@ -9,16 +9,17 @@ export default function SaveButton({ createNewUser }) {
 
   const saveChanges = async (e) => {
     const newUer = createNewUser();
-
     try {
       const response = await axios.put(
         `http://localhost:3001/user/${user.user._id}`,
         {
           ...newUer,
+        },
+        {
+          withCredentials: true,
         }
       );
       const data = response.data;
-      console.log("data: ", data);
 
       await localforage.setItem("user", data);
       setUser(data);

@@ -93,7 +93,6 @@ export default function AddPet({ type, originPet }) {
         headers: { "Content-Type": "multipart/form-data" },
       });
       const data = response.data;
-      console.log("add pet respunse data: ", data);
     } catch (err) {
       console.log(err);
     }

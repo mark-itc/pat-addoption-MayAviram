@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import axios from "axios";
 import { UserContext } from "../../context/UserProvider";
 import localforage from "localforage";
+import { saveTokenInCookies } from "../../token";
 
 export default function Signup() {
   const { setUser } = useContext(UserContext);
@@ -92,6 +93,7 @@ export default function Signup() {
       const response = await axios.post("http://localhost:3001/signup", {
         ...createUser,
       });
+      saveTokenInCookies(response);
       const data = response.data;
       setMessage(data.message);
 

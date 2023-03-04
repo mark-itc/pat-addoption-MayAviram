@@ -5,7 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import localforage from "localforage";
 import { UserContext } from "../context/UserProvider";
-
+import { clearTokenInCookies } from "../token";
 export default function Navigation() {
   const { user, setUser } = useContext(UserContext);
 
@@ -52,6 +52,7 @@ export default function Navigation() {
                 <a
                   href="/"
                   onClick={() => {
+                    clearTokenInCookies();
                     logout();
                   }}
                 >

@@ -2,16 +2,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .imageAndName {
   width: 30%;
+  padding-left: 4%;
 }
 
 .imageAndName img {
   border-radius: 50%;
   width: 100%;
-  height: 30%;
+  aspect-ratio: 1/1;
 }
 
 .petDetailsContiner {

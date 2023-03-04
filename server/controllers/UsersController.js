@@ -12,7 +12,7 @@ class UsersController {
         );
         if (comparePassword) {
           const token = Auth.createToken(user);
-          res.set("Authorization", `Bearer ${token}`);
+          res.setHeader("Authorization", `Bearer ${token}`);
           res.status(200).send({
             success: true,
             message: "You've logged in successfully",
@@ -59,7 +59,7 @@ class UsersController {
         if (addUser) {
           user = await UsersDAO.getUserByEmail(req.body.email);
           const token = Auth.createToken(newUser);
-          res.set("Authorization", `Bearer ${token}`);
+          res.setHeader("Authorization", `Bearer ${token}`);
           res.status(200).send({
             success: true,
             message: "You've logged in successfully",

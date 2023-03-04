@@ -30,24 +30,44 @@ class Auth {
   }
 
   static verify(req, res, next) {
-    const token = req.headers["authorization"].split(" ")[1];
-    console.log("token: ", token);
-    if (token) {
-      jwt.verify(token, process.env.AUTH_SECRET_KEY, (err, decoded) => {
-        if (decoded) {
-          req.body = decoded;
-          next();
-        } else {
-          console.log("err: ", err);
-          res
-            .status(400)
-            .send({ success: false, message: "authenticate fail" });
-        }
-      });
-    } else {
+    try {
+      let token = req.cookies.token;
+      if (token) {
+        token = token.split(" ")[1];
+        jwt.verify(token, process.env.AUTH_SECRET_KEY, (err, decoded) => {
+          if (decoded) {
+            req.user = decoded;
+            next();
+          } else {
+            res
+              .status(400)
+              .send({ success: false, message: "authenticate fail" });
+          }
+        });
+      } else {
+        return res
+          .status(400)
+          .send({ success: false, message: "user isnt authenticate" });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static checkAdmin(req, res, next) {
+    try {
+      if (req.user && req.user.user.role === "admin") {
+        next();
+      } else {
+        return res
+          .status(400)
+          .send({ success: false, message: "this user isnt allowed" });
+      }
+    } catch (err) {
+      console.log(err);
       return res
         .status(400)
-        .send({ success: false, message: "user isnt authenticate" });
+        .send({ success: false, message: "admin authentication is failed" });
     }
   }
 }

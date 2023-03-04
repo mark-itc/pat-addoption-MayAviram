@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
+const cookieParser = require("cookie-parser");
 
 const userrouter = require("./routes/user_router.js");
 const petrouter = require("./routes/pet_router.js");
@@ -12,8 +13,16 @@ const { connectDB } = require("./DB/petAddoptionDB");
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors());
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    exposedHeaders: ["Authorization"],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 
 if (!fs.existsSync(process.env.UPLOADS_FILES_FOLDER)) {
   fs.mkdirSync(process.env.UPLOADS_FILES_FOLDER);

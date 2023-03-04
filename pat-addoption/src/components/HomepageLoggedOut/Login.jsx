@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { UserContext } from "../../context/UserProvider";
 import localforage from "localforage";
+import { saveTokenInCookies } from "../../token";
 
 export default function Login() {
   const { setUser } = useContext(UserContext);
@@ -47,6 +48,9 @@ export default function Login() {
         email: email,
         password: password,
       });
+
+      saveTokenInCookies(response);
+
       const data = response.data;
       setMessage(data.message);
       try {

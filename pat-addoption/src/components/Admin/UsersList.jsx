@@ -10,10 +10,12 @@ export default function UsersList({ showDetails }) {
   useEffect(() => {
     const getUsersList = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/user");
+        const response = await axios.get("http://localhost:3001/user", {
+          withCredentials: true,
+        });
+
         const data = response.data.users;
         setUsersList(data);
-
         if (data[0]) {
           setKeys(Object.keys(data[0]));
         }
